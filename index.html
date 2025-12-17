@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="id" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bhavanix by Haf</title>
+    
+    <!-- 1. Tailwind CSS (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- 2. Lucide Icons (CDN) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- 3. Google Fonts (Inter) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Custom Styles -->
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        
+        .glass {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Smooth Fade In Animation */
+        .fade-in { animation: fadeIn 0.6s ease-out forwards; opacity: 0; transform: translateY(10px); }
+        @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
+
+        /* Background Mesh Gradient */
+        .bg-mesh {
+            background-color: #ffdee9;
+            background-image: linear-gradient(0deg, #ffdee9 0%, #b5fffc 100%);
+            background-attachment: fixed;
+        }
+        
+        /* Floating Blobs Animation */
+        .blob {
+            position: absolute;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.6;
+            animation: float 10s infinite alternate;
+        }
+        @keyframes float { 0% { transform: translate(0, 0); } 100% { transform: translate(20px, 40px); } }
+    </style>
+</head>
+<body class="bg-mesh min-h-screen text-gray-800 relative overflow-x-hidden flex flex-col">
+
+    <!-- Background Blobs -->
+    <div class="blob bg-purple-400 w-64 h-64 md:w-96 md:h-96 rounded-full top-0 left-0 mix-blend-multiply"></div>
+    <div class="blob bg-blue-400 w-64 h-64 md:w-80 md:h-80 rounded-full bottom-0 right-0 animation-delay-2000 mix-blend-multiply"></div>
+    <div class="blob bg-pink-400 w-64 h-64 md:w-80 md:h-80 rounded-full top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 animation-delay-4000 mix-blend-multiply"></div>
+
+    <!-- NAVBAR -->
+    <nav class="sticky top-0 z-50 px-4 md:px-6 py-4 glass border-b-0 border-t-0 rounded-none bg-white/20">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-2 md:gap-3 cursor-pointer group" onclick="switchView('home')">
+                <img src="https://i.postimg.cc/28wwVRYh/Icon-Bhavanix.png" alt="Logo" class="w-8 h-8 md:w-9 md:h-9 object-contain drop-shadow-md transition-transform group-hover:scale-110">
+                <span class="font-bold text-lg md:text-xl tracking-tight text-gray-900">Bhavanix</span>
+            </div>
+            
+            <div id="auth-buttons">
+                <!-- Buttons injected via JS -->
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <!-- PERBAIKAN: Menambahkan 'pb-24' agar konten paling bawah tidak tertutup footer yang fixed -->
+    <main class="max-w-6xl mx-auto px-4 md:px-6 py-8 md:py-12 w-full flex-grow flex flex-col pb-24">
+        
+        <!-- 1. VIEW: HOME (Public List) -->
+        <div id="view-home" class="fade-in w-full">
+            <div class="text-center mb-10 md:mb-16">
+                <h1 class="text-4xl md:text-6xl font-bold text-gray-900 tracking-tight mb-4 drop-shadow-sm leading-tight">
+                    Bhavanix <span class="text-blue-600 font-light">by Haf</span>
+                </h1>
+                <p class="text-lg md:text-xl text-gray-700 max-w-2xl mx-auto font-medium opacity-80 px-4">
+                    Koleksi aplikasi dan proyek eksperimental yang dikurasi dengan sepenuh hati.
+                </p>
+            </div>
+
+            <!-- Loading Spinner -->
+            <div id="loading-indicator" class="flex justify-center py-20">
+                <div class="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+            </div>
+
+            <!-- App Grid (Responsive: 1 col mobile, 2 col tablet, 3 col desktop) -->
+            <div id="app-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Cards injected via JS -->
+            </div>
+
+            <!-- Empty State -->
+            <div id="empty-state" class="hidden text-center py-20 glass rounded-3xl mx-4 md:mx-0">
+                <i data-lucide="box" class="mx-auto w-12 h-12 text-gray-400 mb-2"></i>
+                <p class="text-gray-500">Belum ada aplikasi.</p>
+            </div>
+        </div>
+
+        <!-- 2. VIEW: LOGIN -->
+        <!-- Tambahkan margin auto (my-auto) agar form login tetap di tengah vertikal -->
+        <div id="view-login" class="hidden fade-in w-full flex items-center justify-center my-auto">
+            <div class="glass w-full max-w-md p-8 rounded-3xl text-center shadow-xl">
+                <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i data-lucide="lock" class="w-8 h-8 text-blue-600"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-800 mb-1">Admin Area</h2>
+                <p class="text-sm text-gray-500 mb-4">Login untuk mengelola konten</p>
+                
+                <div class="mb-6 inline-block px-3 py-1 bg-blue-50 text-blue-600 text-xs font-bold rounded-full border border-blue-100">
+                    Khusus: haf.hafian@gmail.com
+                </div>
+
+                <button onclick="handleGoogleLogin()" class="w-full py-3 bg-white hover:bg-gray-50 text-gray-800 border border-gray-200 shadow-md rounded-xl flex items-center justify-center gap-3 transition-all active:scale-95 group">
+                    <i data-lucide="chrome" class="text-blue-500 group-hover:scale-110 transition-transform"></i> Sign in with Google
+                </button>
+                <button onclick="switchView('home')" class="w-full mt-4 py-2 text-gray-500 hover:text-gray-800 text-sm transition-colors">
+                    Kembali ke Home
+                </button>
+            </div>
+        </div>
+
+        <!-- 3. VIEW: ADMIN DASHBOARD -->
+        <div id="view-admin" class="hidden fade-in w-full">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4 bg-white/30 p-4 rounded-2xl border border-white/40">
+                <div>
+                    <h2 class="text-2xl md:text-3xl font-bold text-gray-900">Dashboard</h2>
+                    <div class="flex items-center gap-2 mt-1 text-sm text-gray-600 flex-wrap">
+                        <span class="flex items-center gap-1 bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs font-bold">
+                            <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span> Online
+                        </span>
+                        <span id="admin-email-display" class="font-mono text-xs md:text-sm"></span>
+                    </div>
+                </div>
+                <div class="flex gap-2 w-full md:w-auto">
+                    <button onclick="switchView('home')" class="flex-1 md:flex-none px-4 py-2 bg-white hover:bg-gray-50 text-gray-800 rounded-xl border border-gray-200 shadow-sm transition flex items-center justify-center gap-2">
+                        <i data-lucide="monitor" class="w-4 h-4"></i> <span class="hidden sm:inline">Preview</span>
+                    </button>
+                    <button onclick="handleLogout()" class="flex-1 md:flex-none px-4 py-2 bg-red-500 hover:bg-red-600 text-white shadow-lg shadow-red-500/30 rounded-xl transition flex items-center justify-center gap-2">
+                        <i data-lucide="log-out" class="w-4 h-4"></i> Logout
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Form (Sticky on Desktop) -->
+                <div class="lg:col-span-1">
+                    <div class="glass p-6 rounded-3xl lg:sticky lg:top-24">
+                        <h3 class="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+                            <i data-lucide="edit-2" class="w-5 h-5 text-blue-600"></i>
+                            <span id="form-title">Tambah Aplikasi</span>
+                        </h3>
+                        <form id="app-form" onsubmit="handleSaveApp(event)" class="space-y-4">
+                            <input type="hidden" id="app-id">
+                            <div>
+                                <label class="text-xs font-bold text-gray-500 uppercase tracking-wide">Nama Aplikasi</label>
+                                <input type="text" id="app-name" required class="w-full mt-1 px-4 py-2 bg-white/50 rounded-xl border border-gray-200 outline-none focus:ring-2 focus:ring-blue-400 focus:bg-white transition-all">
+                            </div>
+                            <div>
+                                <label class="text-xs font-bold text-gray-500 uppercase tracking-wide">Kategori</label>
+                                <input type="text" id="app-category" placeholder="Contoh: Productivity" class="w-full mt-1 px-4 py-2 bg-white/50 rounded-xl border border-gray-200 outline-none focus:ring-2 focus:ring-blue-400 focus:bg-white transition-all">
+                            </div>
+                            <div>
+                                <label class="text-xs font-bold text-gray-500 uppercase tracking-wide">Deskripsi</label>
+                                <textarea id="app-desc" required rows="3" class="w-full mt-1 px-4 py-2 bg-white/50 rounded-xl border border-gray-200 outline-none focus:ring-2 focus:ring-blue-400 focus:bg-white transition-all resize-none"></textarea>
+                            </div>
+                            
+                            <!-- Image Upload -->
+                            <div>
+                                <label class="text-xs font-bold text-gray-500 uppercase mb-2 block tracking-wide">Icon</label>
+                                <div class="flex items-center gap-4 p-2 border border-gray-200 rounded-xl bg-white/30">
+                                    <div class="w-16 h-16 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0 border">
+                                        <img id="icon-preview" src="https://placehold.co/100x100?text=Icon" class="w-full h-full object-cover">
+                                    </div>
+                                    <div class="flex-grow">
+                                        <label class="cursor-pointer w-full bg-white px-4 py-2 rounded-lg text-sm border hover:bg-gray-50 transition shadow-sm flex items-center justify-center gap-2">
+                                            <i data-lucide="upload" class="w-4 h-4"></i> Upload
+                                            <input type="file" accept="image/*" class="hidden" onchange="handleImageUpload(this)">
+                                        </label>
+                                        <p class="text-[10px] text-gray-500 mt-1 text-center">Max 500KB</p>
+                                    </div>
+                                </div>
+                                <input type="hidden" id="app-icon-url">
+                            </div>
+
+                            <div>
+                                <label class="text-xs font-bold text-gray-500 uppercase tracking-wide">URL Tujuan</label>
+                                <input type="text" id="app-url" required placeholder="https://..." class="w-full mt-1 px-4 py-2 bg-white/50 rounded-xl border border-gray-200 outline-none focus:ring-2 focus:ring-blue-400 focus:bg-white transition-all">
+                            </div>
+
+                            <div class="flex gap-2 pt-2">
+                                <button type="submit" class="flex-1 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl shadow-lg shadow-blue-500/30 transition font-medium">Simpan</button>
+                                <button type="button" onclick="resetForm()" class="px-4 py-2.5 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-xl transition font-medium">Batal</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Admin List -->
+                <div class="lg:col-span-2 space-y-4" id="admin-app-list">
+                    <!-- List items will be injected here -->
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER (Fixed Bottom) -->
+    <footer class="fixed bottom-0 w-full py-6 text-center text-gray-600 text-sm glass border-t border-white/40 border-b-0 rounded-none z-50">
+        <div class="max-w-6xl mx-auto px-4">
+            <p class="flex items-center justify-center gap-1 flex-wrap leading-relaxed">
+                Made with <span class="text-red-500 animate-pulse">❤️</span> by 
+                <a href="https://www.instagram.com/luthafiyyan_/" target="_blank" class="text-blue-600 hover:text-indigo-600 font-bold transition-colors hover:underline">Luthafiyyan</a> 
+                <span class="hidden sm:inline mx-1">|</span>
+                <span class="opacity-90">Powered by Caffeine & Good Vibes ☕✨</span>
+            </p>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC (FIREBASE V9 CDN) -->
+    <script type="module">
+        // 1. Import Firebase Functions
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, onValue, push, update, remove, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        // 2. Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCPiFyAfY-7ryl3vtXjs7z5mGP5oOmEuMo",
+            authDomain: "bhavanix-9dcef.firebaseapp.com",
+            databaseURL: "https://bhavanix-9dcef-default-rtdb.firebaseio.com/",
+            projectId: "bhavanix-9dcef",
+            storageBucket: "bhavanix-9dcef.firebasestorage.app",
+            messagingSenderId: "713166116354",
+            appId: "1:713166116354:web:ddf06c19f50f2811d0b91b"
+        };
+
+        // 3. Initialize App
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+
+        const APP_ID = 'bhavanix_production'; // Path ID
+        const ADMIN_EMAIL = 'haf.hafian@gmail.com';
+
+        // Global State
+        let currentUser = null;
+        let appsData = [];
+
+        // --- DOM Elements ---
+        const views = {
+            home: document.getElementById('view-home'),
+            login: document.getElementById('view-login'),
+            admin: document.getElementById('view-admin')
+        };
+        const authButtonsDiv = document.getElementById('auth-buttons');
+        const appGrid = document.getElementById('app-grid');
+        const adminList = document.getElementById('admin-app-list');
+        const loadingSpinner = document.getElementById('loading-indicator');
+        const emptyState = document.getElementById('empty-state');
+
+        // --- Functions ---
+
+        // Switch View
+        window.switchView = (viewName) => {
+            Object.values(views).forEach(el => el.classList.add('hidden'));
+            views[viewName].classList.remove('hidden');
+            // Scroll top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            lucide.createIcons();
+        };
+
+        // Render Auth Button
+        function renderAuthButton() {
+            if (currentUser && currentUser.email === ADMIN_EMAIL) {
+                authButtonsDiv.innerHTML = `
+                    <button onclick="switchView('admin')" class="p-2 text-gray-600 hover:bg-white/50 hover:text-blue-600 rounded-lg transition shadow-sm border border-transparent hover:border-white/50" title="Admin Dashboard">
+                        <i data-lucide="settings" class="w-5 h-5 md:w-6 md:h-6"></i>
+                    </button>
+                `;
+            } else {
+                authButtonsDiv.innerHTML = `
+                    <button onclick="switchView('login')" class="p-2 text-gray-500 hover:bg-white/50 hover:text-gray-900 rounded-lg transition" title="Login Admin">
+                        <i data-lucide="settings" class="w-5 h-5 md:w-6 md:h-6"></i>
+                    </button>
+                `;
+            }
+            lucide.createIcons();
+        }
+
+        // Render App Cards (Home)
+        function renderApps() {
+            appGrid.innerHTML = '';
+            adminList.innerHTML = '';
+
+            if (appsData.length === 0) {
+                emptyState.classList.remove('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+                
+                appsData.forEach(item => {
+                    // Public Card
+                    const card = document.createElement('div');
+                    card.className = "glass rounded-3xl p-6 group hover:-translate-y-2 hover:shadow-2xl hover:shadow-blue-500/20 transition-all duration-300 flex flex-col h-full bg-white/40";
+                    card.innerHTML = `
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="w-16 h-16 bg-white rounded-2xl shadow-sm overflow-hidden p-1 flex-shrink-0">
+                                <img src="${item.iconUrl || 'https://placehold.co/100x100?text=App'}" class="w-full h-full object-cover rounded-xl" onerror="this.src='https://placehold.co/100x100?text=Error'">
+                            </div>
+                            <span class="bg-white/60 backdrop-blur-sm text-[10px] font-bold px-3 py-1 rounded-full text-gray-600 uppercase tracking-wider border border-white/50 ml-2 text-center max-w-[120px] truncate">${item.category || 'App'}</span>
+                        </div>
+                        <h3 class="text-xl md:text-2xl font-bold text-gray-900 mb-2 group-hover:text-blue-700 transition-colors line-clamp-1" title="${item.name}">${item.name}</h3>
+                        <p class="text-gray-600 mb-6 line-clamp-3 flex-grow text-sm leading-relaxed">${item.description}</p>
+                        <a href="${item.url}" target="_blank" class="mt-auto w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-medium shadow-lg shadow-blue-500/30 active:scale-95 transition-all flex items-center justify-center gap-2 group-hover:shadow-blue-600/40">
+                            Buka Aplikasi <i data-lucide="external-link" class="w-4 h-4"></i>
+                        </a>
+                    `;
+                    appGrid.appendChild(card);
+
+                    // Admin List Item
+                    const listItem = document.createElement('div');
+                    listItem.className = "glass p-4 rounded-2xl flex items-center gap-4 hover:bg-white/60 transition group bg-white/40";
+                    listItem.innerHTML = `
+                        <img src="${item.iconUrl || 'https://placehold.co/50'}" class="w-12 h-12 rounded-lg bg-gray-200 object-cover flex-shrink-0 shadow-sm">
+                        <div class="flex-grow min-w-0">
+                            <h4 class="font-bold text-gray-900 truncate text-sm md:text-base">${item.name}</h4>
+                            <p class="text-xs text-gray-500 truncate">${item.category}</p>
+                        </div>
+                        <div class="flex gap-2 flex-shrink-0">
+                            <button onclick="triggerEdit('${item.id}')" class="p-2 text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition" title="Edit"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
+                            <button onclick="deleteApp('${item.id}')" class="p-2 text-red-500 bg-red-50 hover:bg-red-100 rounded-lg transition" title="Hapus"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                        </div>
+                    `;
+                    adminList.appendChild(listItem);
+                });
+            }
+            lucide.createIcons();
+        }
+
+        // --- AUTH LOGIC ---
+        window.handleGoogleLogin = async () => {
+            try {
+                await signInWithPopup(auth, provider);
+                // onAuthStateChanged handles the rest
+            } catch (error) {
+                alert("Login gagal: " + error.message);
+            }
+        };
+
+        window.handleLogout = async () => {
+            await signOut(auth);
+            switchView('home');
+        };
+
+        // Listen Auth State
+        onAuthStateChanged(auth, (user) => {
+            currentUser = user;
+            if (user && user.email === ADMIN_EMAIL) {
+                document.getElementById('admin-email-display').innerText = user.email;
+                renderAuthButton();
+                if(views.login.classList.contains('hidden') === false) switchView('admin');
+            } else {
+                if (user) {
+                    // Logged in but wrong email
+                    alert("Akses ditolak. Email tidak terdaftar sebagai admin.");
+                    signOut(auth);
+                }
+                renderAuthButton();
+            }
+        });
+
+        // --- DATABASE LOGIC ---
+        
+        // Listen Data
+        const dbRef = ref(db, `artifacts/${APP_ID}/public/data/apps`);
+        onValue(dbRef, (snapshot) => {
+            const data = snapshot.val();
+            appsData = [];
+            if (data) {
+                Object.keys(data).forEach(key => {
+                    appsData.push({ id: key, ...data[key] });
+                });
+            }
+            // Sort Descending
+            appsData.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            loadingSpinner.classList.add('hidden');
+            renderApps();
+        });
+
+        // Save Data (Create/Update)
+        window.handleSaveApp = async (e) => {
+            e.preventDefault();
+            if (!currentUser) return alert("Anda harus login!");
+
+            const id = document.getElementById('app-id').value;
+            const data = {
+                name: document.getElementById('app-name').value,
+                category: document.getElementById('app-category').value,
+                description: document.getElementById('app-desc').value,
+                iconUrl: document.getElementById('app-icon-url').value,
+                url: document.getElementById('app-url').value,
+            };
+
+            try {
+                if (id) {
+                    await update(ref(db, `artifacts/${APP_ID}/public/data/apps/${id}`), data);
+                } else {
+                    data.createdAt = new Date().toISOString();
+                    await set(push(ref(db, `artifacts/${APP_ID}/public/data/apps`)), data);
+                }
+                resetForm();
+                alert("Berhasil disimpan!");
+            } catch (error) {
+                alert("Error: " + error.message);
+            }
+        };
+
+        // Delete Data
+        window.deleteApp = async (id) => {
+            if (confirm("Yakin ingin menghapus?")) {
+                await remove(ref(db, `artifacts/${APP_ID}/public/data/apps/${id}`));
+            }
+        };
+
+        // Edit Data (Populate Form)
+        window.triggerEdit = (id) => {
+            const app = appsData.find(a => a.id === id);
+            if (app) {
+                document.getElementById('app-id').value = app.id;
+                document.getElementById('app-name').value = app.name;
+                document.getElementById('app-category').value = app.category;
+                document.getElementById('app-desc').value = app.description;
+                document.getElementById('app-url').value = app.url;
+                document.getElementById('app-icon-url').value = app.iconUrl;
+                document.getElementById('icon-preview').src = app.iconUrl || "https://placehold.co/100x100?text=Icon";
+                
+                document.getElementById('form-title').innerText = "Edit Aplikasi";
+                // Scroll to form
+                document.querySelector('.sticky').scrollIntoView({ behavior: 'smooth' });
+            }
+        };
+
+        // Helper: Image to Base64
+        window.handleImageUpload = (input) => {
+            const file = input.files[0];
+            if (file) {
+                if (file.size > 500000) return alert("Gambar terlalu besar (Max 500KB)");
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    document.getElementById('app-icon-url').value = e.target.result;
+                    document.getElementById('icon-preview').src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        };
+
+        // Helper: Reset Form
+        window.resetForm = () => {
+            document.getElementById('app-form').reset();
+            document.getElementById('app-id').value = "";
+            document.getElementById('app-icon-url').value = "";
+            document.getElementById('icon-preview').src = "https://placehold.co/100x100?text=Icon";
+            document.getElementById('form-title').innerText = "Tambah Aplikasi";
+        };
+
+        // Initial Icon Render
+        lucide.createIcons();
+    </script>
+</body>
+</html>
