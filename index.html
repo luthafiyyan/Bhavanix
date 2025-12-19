@@ -73,6 +73,7 @@
     </nav>
 
     <!-- MAIN CONTENT CONTAINER -->
+    <!-- PERBAIKAN: Menambahkan 'pb-24' agar konten paling bawah tidak tertutup footer yang fixed -->
     <main class="max-w-6xl mx-auto px-4 md:px-6 py-8 md:py-12 w-full flex-grow flex flex-col pb-24">
         
         <!-- 1. VIEW: HOME (Public List) -->
@@ -82,7 +83,7 @@
                     Bhavanix <span class="text-blue-600 font-light">by Haf</span>
                 </h1>
                 <p class="text-lg md:text-xl text-gray-700 max-w-2xl mx-auto font-medium opacity-80 px-4">
-                    Koleksi aplikasi dan proyek eksperimental yang dibuat oleh luthafiyyan.
+                    Koleksi aplikasi dan proyek eksperimental yang dikurasi dengan sepenuh hati.
                 </p>
             </div>
 
@@ -104,6 +105,7 @@
         </div>
 
         <!-- 2. VIEW: LOGIN -->
+        <!-- Tambahkan margin auto (my-auto) agar form login tetap di tengah vertikal -->
         <div id="view-login" class="hidden fade-in w-full flex items-center justify-center my-auto">
             <div class="glass w-full max-w-md p-8 rounded-3xl text-center shadow-xl">
                 <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -210,10 +212,12 @@
 
     </main>
 
-    <!-- FOOTER (Fixed Bottom) -->
-    <footer class="fixed bottom-0 w-full py-6 text-center text-gray-600 text-sm glass border-t border-white/40 border-b-0 rounded-none z-50">
-        <div class="max-w-6xl mx-auto px-4">
-            <p class="flex items-center justify-center gap-1 flex-wrap leading-relaxed">
+    <!-- FOOTER (Fixed Bottom - Revised) -->
+    <!-- py-3: Mengurangi ketebalan (sebelumnya py-6) -->
+    <!-- px-4 md:px-6: Menyesuaikan padding horizontal agar sama dengan Navbar -->
+    <footer class="fixed bottom-0 w-full py-3 text-center text-gray-600 text-sm glass border-t border-white/40 border-b-0 rounded-none z-50 px-4 md:px-6">
+        <div class="max-w-6xl mx-auto flex justify-center items-center">
+            <p class="flex items-center gap-1 flex-wrap leading-relaxed">
                 Made with <span class="text-red-500 animate-pulse">❤️</span> by 
                 <a href="https://www.instagram.com/luthafiyyan_/" target="_blank" class="text-blue-600 hover:text-indigo-600 font-bold transition-colors hover:underline">Luthafiyyan</a> 
                 <span class="hidden sm:inline mx-1">|</span>
