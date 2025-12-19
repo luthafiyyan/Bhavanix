@@ -9,9 +9,12 @@
 - 🌍 **Easy Deployment**: Bisa langsung di-host di GitHub Pages atau layanan hosting statis lainnya.
 
 ## 🛠️ Cara Menjalankan
-1. Clone repository ini:
-> - $ git clone https://github.com/luthafiyyan/Bhavanix.git
-> - $ cd Bhavanix
+Clone repository ini:
+```bash
+git clone https://github.com/luthafiyyan/Bhavanix.git
+cd Bhavanix
+```
+---
 
 ## 👨‍💻 Author
 Made with ❤️ by <a href="https://www.instagram.com/luthafiyyan_/" target="_blank" rel="noopener noreferrer" class="text-primary hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-colors">Luthafiyyan</a> Powered by Caffeine & Good Vibes ☕✨
